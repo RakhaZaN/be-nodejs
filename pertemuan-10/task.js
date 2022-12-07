@@ -14,18 +14,18 @@ const showDownload = (result) => {
  * 
  * @param callShowDownload (function)
  */
-const download = () => {
+const download = (callShowDownload) => {
     return new Promise((resolve) => {
         console.log('Downloading...')
         setTimeout(() => {
-            resolve('file.png')
+            const result = "windowns-10.exe"
+            resolve(callShowDownload(result))
         }, 5000)
     })
 }
 
 const main = async () => {
-    file = await download()
-    console.log(await showDownload(file))
+    console.log(await download(showDownload))
 }
 
 main()
