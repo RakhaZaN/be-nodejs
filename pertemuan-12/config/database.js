@@ -19,10 +19,10 @@ const {
  * @param {host, user, password, database}
  */
 const db = mysql.createConnection({
-    host: DB_HOST,
-    user: DB_USERNAME,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
+    host: DB_HOST || 'localhost',
+    user: DB_USERNAME || 'root',
+    password: DB_PASSWORD || '',
+    database: DB_DATABASE || '',
 })
 
 /**

@@ -19,7 +19,6 @@ class Student {
 
     /**
      * Get all student
-     * @static
      * 
      * @returns Data Students
      */
@@ -28,27 +27,75 @@ class Student {
         return new Promise((resolve, reject) => {
             const query = "SELECT * FROM students"
 
-            db.query(query, (err, results) => {
-                resolve(results)
+            db.query(query, (err, result) => {
+                resolve(result)
             })
         })
     }
 
     /**
      * Insert new student
-     * @static
      * 
      * @param {object} data
      * @returns Statistics
      */
     static create(data) {
         return new Promise((resolve, reject) => {
-            const query = `INSERT INTO students SET ?`;
+            const query = "INSERT INTO students SET ?";
 
             db.query(query, data, (err, result) => {
                 resolve(result)
             })
         });
+    }
+
+    /**
+     * Get student based on id
+     * 
+     * @param {integer} id 
+     * @returns Data student
+     */
+    static find(id) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM students where id=? LIMIT 1"
+
+            db.query(query, id, (err, result) => {
+                resolve(result)
+            })
+        })
+    }
+
+    /**
+     * Update student data
+     * 
+     * @param {object} data 
+     * @param {integer} id 
+     * @returns Statistics
+     */
+    static update(data, id) {
+        return new Promise((resolve, reject) => {
+            const query = "UPDATE students SET ? where id=?"
+
+            db.query(query, [data, id], (err, result) => {
+                resolve(result)
+            })
+        })
+    }
+
+    /**
+     * Delete student data
+     * 
+     * @param {integer} id 
+     * @returns statistics
+     */
+    static delete(id) {
+        return new Promise((resolve, reject) => {
+            const query = "DELETE FROM students where id=?"
+
+            db.query(query, id, (err, result) => {
+                resolve(result)
+            })
+        })
     }
 }
 

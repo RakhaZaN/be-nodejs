@@ -40,39 +40,61 @@ class StudentController {
         res.json(data)
     }
 
-    // update(req, res) {
-    //     // Get params
-    //     const { id } = req.params
-    //     // Get data post
-    //     const { nama } = req.body
+    async show(req, res) {
+        // Get params
+        const { id } = req.params
 
-    //     // Update student with id (index)
-    //     students[id] = nama
+        // Call static method find()
+        const student = await Student.find(id)
 
-    //     // Response format
-    //     const data = {
-    //         message: `Edit student with id ${id}: ${nama}`,
-    //         data: [...students]
-    //     }
-    //     // Set response to JSON
-    //     res.json(data)
-    // }
+        const data = {
+            message: `Get student with id: ${id}`,
+            data: student
+        }
+        // // Set response to JSON
+        res.json(data)
+    }
 
-    // destroy(req, res) {
-    //     // Get params
-    //     const { id } = req.params
+    async update(req, res) {
+        // Get params
+        const { id } = req.params
+        // Get data post
+        const { nama, nim, email, jurusan } = req.body
 
-    //     // Splice student with id (index)
-    //     students.splice(id, 1)
+        // Set value
+        const value = {
+            nama,
+            nim,
+            email,
+            jurusan
+        }
 
-    //     // Response format
-    //     const data = {
-    //         message: `Delete student with id ${id}`,
-    //         data: [...students]
-    //     }
-    //     // Set response to JSON
-    //     res.json(data)
-    // }
+        // Call static method update()
+        const update = await Student.update(value, id)
+
+        // Response format
+        const data = {
+            message: `Edit student with id: ${id}`,
+            data: { id, ...value }
+        }
+        // Set response to JSON
+        res.json(data)
+    }
+
+    async destroy(req, res) {
+        // Get params
+        const { id } = req.params
+
+        // Call static method delete()
+        const del = await Student.delete(id)
+
+        // Response format
+        const data = {
+            message: `Delete student with id ${id}`
+        }
+        // Set response to JSON
+        res.json(data)
+    }
 
 }
 
