@@ -13,7 +13,7 @@ class StudentController {
             data: students
         }
         // Set response to JSON
-        res.json(data)
+        return res.status(200).json(students)
     }
 
     async store(req, res) {
@@ -28,16 +28,20 @@ class StudentController {
             jurusan
         }
 
-        // Call static method create()
-        const create = await Student.create(value)
+        try {
+            // Call static method create()
+            const create = await Student.create(value)
 
-        // // Response format
-        const data = {
-            message: "Add new student data",
-            data: { id: create.insertId, ...value }
+            // Response format
+            const data = {
+                message: "Add new student data",
+                data: { id: create.insertId, ...value }
+            }
+            // Set response to JSON
+            return res.status(201).json(data)
+        } catch (error) {
+            return res.status(400).json({ message: error.sqlMessage })
         }
-        // // Set response to JSON
-        res.json(data)
     }
 
     async show(req, res) {
@@ -48,52 +52,74 @@ class StudentController {
         const student = await Student.find(id)
 
         const data = {
-            message: `Get student with id: ${id}`,
+            message: student ? `Get student with id: ${id}` : `Student Not Found`,
             data: student
         }
         // // Set response to JSON
-        res.json(data)
+        return res.status(student ? 200 : 404).json(data)
     }
 
     async update(req, res) {
         // Get params
         const { id } = req.params
+
+        // Check student exists
+        // Call static method find()
+        const student = await Student.find(id)
+        if (!student) return res.status(404).json({ message: "Student Not Found" })
+
         // Get data post
         const { nama, nim, email, jurusan } = req.body
 
         // Set value
         const value = {
-            nama,
-            nim,
-            email,
-            jurusan
+            nama: nama || student.nama,
+            nim: nim || student.nim,
+            email: email || student.email,
+            jurusan: jurusan || student.jurusan
         }
 
-        // Call static method update()
-        const update = await Student.update(value, id)
+        try {
+            // Call static method update()
+            await Student.update(value, student.id)
 
-        // Response format
-        const data = {
-            message: `Edit student with id: ${id}`,
-            data: { id, ...value }
+            // Response format
+            const data = {
+                message: `Edit student with id: ${id}`,
+                data: { id, ...value }
+            }
+            // Set response to JSON
+            return res.status(200).json(data)
+        } catch (error) {
+            // Set response to JSON
+            return res.status(400).json({ message: error })
         }
-        // Set response to JSON
-        res.json(data)
+
     }
 
     async destroy(req, res) {
         // Get params
         const { id } = req.params
 
-        // Call static method delete()
-        const del = await Student.delete(id)
+        // Check student exists
+        // Call static method find()
+        const student = await Student.find(id)
+        if (!student) return res.status(404).json({ message: "Student Not Found" })
 
-        // Response format
-        const data = {
-            message: `Delete student with id ${id}`
+        try {
+            // Call static method delete()
+            await Student.delete(id)
+
+            // Response format
+            const data = {
+                message: `Delete student with id ${id}`
+            }
+            // Set response to JSON
+            return res.status(200).json(data)
+        } catch (error) {
+            // Set response to JSON
+            return res.status(400).json({ message: error })
         }
-        // Set response to JSON
-        res.json(data)
     }
 
 }

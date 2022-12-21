@@ -44,6 +44,7 @@ class Student {
             const query = "INSERT INTO students SET ?";
 
             db.query(query, data, (err, result) => {
+                if (err) reject(err)
                 resolve(result)
             })
         });
@@ -60,7 +61,7 @@ class Student {
             const query = "SELECT * FROM students where id=? LIMIT 1"
 
             db.query(query, id, (err, result) => {
-                resolve(result)
+                resolve(...result)
             })
         })
     }
@@ -77,6 +78,7 @@ class Student {
             const query = "UPDATE students SET ? where id=?"
 
             db.query(query, [data, id], (err, result) => {
+                if (err) reject(err)
                 resolve(result)
             })
         })
@@ -93,6 +95,7 @@ class Student {
             const query = "DELETE FROM students where id=?"
 
             db.query(query, id, (err, result) => {
+                if (err) reject(err)
                 resolve(result)
             })
         })
