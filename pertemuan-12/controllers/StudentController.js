@@ -13,7 +13,7 @@ class StudentController {
             data: students
         }
         // Set response to JSON
-        return res.status(200).json(students)
+        return res.status(200).json(data)
     }
 
     async store(req, res) {
